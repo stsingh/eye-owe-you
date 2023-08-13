@@ -1,6 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import './App.css';
-import Switcher from "./Switcher";
+import UserContext from './UserContext';
+import Start from './Start'
+import axios from 'axios';
 
 function App() {
   //useStates
@@ -9,44 +11,28 @@ function App() {
   const [dir, setDir] = useState(options[0]);
   const [money, setMoney] = useState(0.01);
   const[records, setRecords] = useState([]);
+  const userInfo = useContext(UserContext);
 
   //get records to page
   useEffect(() => {
-    getRecords().then(setRecords);
-  }, [])
-
-  //method to get balances for each person
-
-  
-  //get records from mongodb
-  async function getRecords() {
-    const url = process.env.REACT_APP_API_URL + "/records";
-    const response = await fetch(url);
-    return await response.json();
-  }
-
-  //add a new record to the database
-  const addNewRecord = async (e) => {
-    e.preventDefault();
-    const url = process.env.REACT_APP_API_URL + "/record";
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {"Content-type":"application/json"},
-        body: JSON.stringify({name, dir, money})
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-  
-      const responseData = await response.json();
-      console.log(responseData.message); // Message from the server
-    } catch (error) {
-      console.error('Error updating money:', error.message);
+    if(userInfo.email) {
+        const url = process.env.REACT_APP_API_URL + "/records";
+        axios.get(url, {withCredentials:true}).then(response => {
+        setRecords(response.data);
+      })
     }
-  };
+  }, [])  
+
+  async function addNewRecord(e) {
+    const url = process.env.REACT_APP_API_URL + "/records";
+    axios.put(url, {name: name, dir: dir, money: money}, {withCredentials:true}).then(response => {
+      setRecords([...records, response.data]);
+      setName('');
+      setDir('');
+      setMoney('');
+      
+    })
+  }
 
   //make sure names are capitalized
   function capitalizeFirstLetter(string) {
@@ -59,7 +45,6 @@ function App() {
       balance += record.money;
   }
 
-
   //get display sentence
   function sentence(record) {
     if(record.dir === "owes you") {
@@ -68,63 +53,74 @@ function App() {
     return <div className="text-2xl"><span className={'text-red-800'}>You owe</span> {record.name} ${0-record.money.toFixed(2)}</div>
   }
 
+  
+
   document.body.className = "dark:bg-gray-800";
-  return (
-    <main className="content-center">
-      <div>
-        <div className="absolute top-0 right-0 w-10"><Switcher/></div>
-      </div>
-      <span className = "p-2 flex justify-center items-center align-baseline dark:text-white font-bold text-2xl">Spending Power: </span>
-      <div className='flex justify-center items-center'>
-        <h1 className="p-3 mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">${balance.toFixed(2)}</h1>
-      </div>
-      <form onSubmit={addNewRecord} className="space-y-3">
-        <div className="gap-1 flex justify-center items-center">
-          <input type='text' 
-                 value={name} 
-                 onChange={ev => setName(capitalizeFirstLetter(ev.target.value))} 
-                 placeholder='Name' 
-                 className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                 required
-          />
-          <select onChange={(e) => 
-                  setDir(e.target.value)} 
-                  defaultValue={dir} 
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          >
-            {options.map((option, idx) => (
-            <option key={idx}>{option}</option>
-            ))}
-          </select>
-          <div className='dark:text-white'>
-          $
-            <input type="number" 
-                   value={money} 
-                   onChange={ev => setMoney(ev.target.value)} 
+  if(!userInfo.email) {
+    return (
+      <Start/>
+    );
+  } else {
+    return (
+      <main >
+        <div>
+          <span className = "p-2 flex justify-center items-center align-baseline dark:text-white font-bold text-2xl">Spending Power: </span>
+        </div>
+        <div className='flex justify-center items-center'>
+          <h1 className="p-3 mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">${balance.toFixed(2)}</h1>
+        </div>
+        <form onSubmit={addNewRecord} className="space-y-3">
+          <div className="gap-1 flex justify-center items-center">
+            <input type='text' 
+                   value={name} 
+                   onChange={ev => setName(capitalizeFirstLetter(ev.target.value))} 
+                   placeholder='Name' 
                    className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    required
             />
+            <select onChange={(e) => 
+                    setDir(e.target.value)} 
+                    defaultValue={dir} 
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            >
+              {options.map((option, idx) => (
+              <option key={idx}>{option}</option>
+              ))}
+            </select>
+            <div className='dark:text-white'>
+            $
+              <input type="number" 
+                     min="0"
+                     value={money} 
+                     onChange={ev => setMoney(ev.target.value)} 
+                     className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                     required
+              />
+            </div>
           </div>
-        </div>
-        <div className="flex justify-center">
-            <button type='submit' className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm block w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Record</button>
-        </div>
-      </form>
-      <div className='mb-3 space-y-2 p-5 mb-4 text-gray-900 dark:text-white'>
-        <h1 className='flex justify-center items-center text-3xl font-bold'>Summary: </h1>
-        <ul className='list-disc'>
-          {records.length > 0 && records.map(record => (
-            <li><div key = {record._id} className ='gap-3 flex p-5'>
-              {sentence(record)}
-            </div></li>
-          ))}
-        </ul>
+          <div className="flex justify-center">
+              <button type='submit' className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm block w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Record</button>
+          </div>
+        </form>
         
-      </div>
-
-      
-    </main>
-  );
+        <div className='text-gray-900 dark:text-white p-6'>
+          <h1 className='flex justify-center items-center text-3xl font-bold'>Summary: </h1>
+          {records.length > 0 && records.map(record => (
+              <div key={record._id} className="flex justify-center items-center p-5 ">
+                <div className="justify-start border-b-2 border-y-gray-400 max-w-md">
+                  {sentence(record)}
+                </div>
+                <div className="right">
+                  
+                </div>
+              </div>
+            ))}
+        </div>
+        
+      </main>
+    );
+  }
+  
 }
 
 export default App;

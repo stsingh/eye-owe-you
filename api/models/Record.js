@@ -1,11 +1,12 @@
-const { model, Schema } = require("mongoose");
+const mongoose = require("mongoose");
 
-const RecordSchema = new Schema({
-    name: {type: String, required:true, unique: true},
+const RecordSchema = new mongoose.Schema({
+    name: {type: String, required:true},
     dir: {type: String, required:true},
-    money: {type: Number, required:true}
+    money: {type: Number, required:true},
+    user:{type:mongoose.SchemaTypes.ObjectId}
 });
 
-const RecordModel = model('Record', RecordSchema);
+const RecordModel = mongoose.model('Record', RecordSchema);
 
 module.exports = RecordModel;
