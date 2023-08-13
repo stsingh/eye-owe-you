@@ -9,7 +9,7 @@ function App() {
   const options = ["owes you", "is owed"];
   const [name,setName] = useState('');
   const [dir, setDir] = useState(options[0]);
-  const [money, setMoney] = useState(0.01);
+  const [money, setMoney] = useState('');
   const[records, setRecords] = useState([]);
   const userInfo = useContext(UserContext);
 
