@@ -70,8 +70,8 @@ function App() {
         <div className='flex justify-center items-center'>
           <h1 className="p-3 mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">${balance.toFixed(2)}</h1>
         </div>
-        <form onSubmit={addNewRecord} className="space-y-3">
-          <div className="gap-1 flex justify-center items-center">
+        <form onSubmit={addNewRecord} className="space-y-3 text-center">
+          <div className="gap-1 lg:flex md:flex sm:flex justify-center items-center">
             <div>
               <input type='text' 
                     value={name} 
@@ -93,7 +93,7 @@ function App() {
               </select>
             </div>
             
-            <div className='relative rounded-md shadow-sm dark:text-white'>
+            <div className='relative rounded-md dark:text-white'>
               <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
                 <span class="text-gray-500 sm:text-sm">$</span>
               </div>
