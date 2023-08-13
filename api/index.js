@@ -108,7 +108,7 @@ app.put('/api/records', async (req, res) => {
       }
       await Record.findOneAndUpdate({name: existingPerson.name, user:existingPerson.user}, {$inc: {money: mon}})
       const thing = await Record.findOne({name: existingPerson.name, user:existingPerson.user})
-      if(thing.money == 0) {
+      if(thing.money === 0) {
         await Record.findOneAndDelete({name: existingPerson.name, user:existingPerson.user})
       } else {
         if(0-mon > existingPerson.money) {
