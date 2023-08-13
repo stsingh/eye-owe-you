@@ -33,8 +33,14 @@ const Landing = () => {
               <div>
                 {!!email && (
                   <div>
+                    <div className="absolute top-2 right-2">
+                      <div className="flex justify-end ">
+                        <button className="dark:text-white bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => logout()}>Log out</button>
+                      </div>
+                      <div className="text-xs ">{email}</div>
+                    </div>
                     <App/>
-                    <button className="absolute top-2 right-2 dark:text-white bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded" onClick={() => logout()}>Log out of {email}</button>
+                    
                   </div>
                 )} 
                 {!email && (

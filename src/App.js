@@ -72,36 +72,44 @@ function App() {
         </div>
         <form onSubmit={addNewRecord} className="space-y-3">
           <div className="gap-1 flex justify-center items-center">
-            <input type='text' 
-                   value={name} 
-                   onChange={ev => setName(capitalizeFirstLetter(ev.target.value))} 
-                   placeholder='Name' 
-                   className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                   required
-            />
-            <select onChange={(e) => 
-                    setDir(e.target.value)} 
-                    defaultValue={dir} 
+            <div>
+              <input type='text' 
+                    value={name} 
+                    onChange={ev => setName(capitalizeFirstLetter(ev.target.value))} 
+                    placeholder='Name' 
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            >
-              {options.map((option, idx) => (
-              <option key={idx}>{option}</option>
-              ))}
-            </select>
-            <div className='dark:text-white'>
-            $
-              <input type="number" 
-                     min="0"
-                     step="0.01"
-                     value={money} 
-                     onChange={ev => setMoney(ev.target.value)} 
-                     className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                     required
+                    required
               />
+            </div>
+            <div>
+              <select onChange={(e) => 
+                      setDir(e.target.value)} 
+                      defaultValue={dir} 
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+              >
+                {options.map((option, idx) => (
+                <option key={idx}>{option}</option>
+                ))}
+              </select>
+            </div>
+            
+            <div className='relative rounded-md shadow-sm dark:text-white'>
+              <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+                <span class="text-gray-500 sm:text-sm">$</span>
+              </div>
+              <input type="number" 
+                    min="0"
+                    step="0.01" 
+                    name="price" 
+                    id="price"
+                    value={money} 
+                    onChange={ev => setMoney(ev.target.value)} 
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 pl-7 " placeholder="0.00"
+                    required/>
             </div>
           </div>
           <div className="flex justify-center">
-              <button type='submit' className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm block w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Record</button>
+              <button type='submit' className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm block w-fit sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Record</button>
           </div>
         </form>
         
