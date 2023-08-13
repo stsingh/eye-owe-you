@@ -21,16 +21,17 @@ function App() {
         setRecords(response.data);
       })
     }
-  })  
+  }, [])  
 
   async function addNewRecord(e) {
+    //e.preventDefault()
     const url = process.env.REACT_APP_API_URL + "/records";
     axios.put(url, {name: name, dir: dir, money: money}, {withCredentials:true}).then(response => {
       setRecords([...records, response.data]);
       setName('');
       setDir('');
       setMoney('');
-      
+      console.log(response)
     })
   }
 

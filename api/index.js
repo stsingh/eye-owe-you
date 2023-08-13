@@ -105,13 +105,19 @@ app.put('/api/records', async (req, res) => {
       if(dir === "is owed") {
         mon = 0 - mon;
       }
-      const thing = await Record.findOneAndUpdate({name: existingPerson.name, user:existingPerson.user}, {$inc: {money: mon}})
-      if(0-mon > existingPerson.money) {
-        await Record.findOneAndUpdate({name: existingPerson.name, user:existingPerson.user}, {$set: {dir: "is owed"}})
+      await Record.findOneAndUpdate({name: existingPerson.name, user:existingPerson.user}, {$inc: {money: mon}})
+      const thing = await Record.findOne({name: existingPerson.name, user:existingPerson.user})
+      if(thing.money == 0) {
+        await Record.findOneAndDelete({name: existingPerson.name, user:existingPerson.user})
       } else {
-        await Record.findOneAndUpdate({name: existingPerson.name, user:existingPerson.user}, {$set: {dir: "owes you"}})
+        if(0-mon > existingPerson.money) {
+          await Record.findOneAndUpdate({name: existingPerson.name, user:existingPerson.user}, {$set: {dir: "is owed"}})
+        } else {
+          await Record.findOneAndUpdate({name: existingPerson.name, user:existingPerson.user}, {$set: {dir: "owes you"}})
+        }
+        res.status(200).json({ message: thing });
       }
-      res.status(200).json({ message: thing });
+      
     } else {
       // If person doesn't exist, create a new person with the inputted money
       if(dir === "is owed") {
