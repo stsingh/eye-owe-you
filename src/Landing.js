@@ -60,7 +60,7 @@ const Landing = () => {
           </BrowserRouter>
         
         
-        <div className="absolute bottom-2 right-2 flex dark:text-white" >A MERN-based webapp by&nbsp;<a href="https://stsingh.github.io/" target="_blank" rel="noreferrer">Sahej Singh</a></div>
+        <div className="absolute inset-x-0 bottom-2 text-center dark:text-white" >A MERN-based webapp by&nbsp;<a href="https://stsingh.github.io/" target="_blank" rel="noreferrer">Sahej Singh</a></div>
     </UserContext.Provider>
     
   );
