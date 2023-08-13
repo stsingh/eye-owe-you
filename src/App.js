@@ -21,7 +21,7 @@ function App() {
         setRecords(response.data);
       })
     }
-  }, [])  
+  })  
 
   async function addNewRecord(e) {
     const url = process.env.REACT_APP_API_URL + "/records";
@@ -91,6 +91,7 @@ function App() {
             $
               <input type="number" 
                      min="0"
+                     step="0.01"
                      value={money} 
                      onChange={ev => setMoney(ev.target.value)} 
                      className="bg-gray-50 border border-gray-300 text-gray-900 text-md rounded-lg focus:ring-blue-500 focus:border-blue-500 inline-block w-fit p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
