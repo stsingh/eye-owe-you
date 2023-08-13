@@ -36,6 +36,7 @@ app.get('/api/user', async (req, res) => {
 });
 
 app.post('/api/register', async (req, res) => {
+  await mongoose.connect(process.env.MONGO_URL);
   const {email, password} = req.body;
   const hashedPassword = bcrypt.hashSync(password, 10);
   const user = new User({email, password:hashedPassword});
