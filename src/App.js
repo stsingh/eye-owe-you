@@ -25,11 +25,11 @@ function App() {
           setRecords(response.data);
         });
       } else {
-        setTimeout(navigate('/'), 200);
+        navigate('/');
       }
       setIsLoading(false);
     }
-    setTimeout(verify, 250);
+    setTimeout(verify, 300);
   }, [navigate, userInfo.email])
 
   if(isLoading) {
