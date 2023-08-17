@@ -17,17 +17,18 @@ function App() {
   //get records to page
   useEffect(() => {
     const verify = async () => {
-      const userEmail = await userInfo.email;
+      let userEmail = await userInfo.email;
       if(userEmail) {
         const url = process.env.REACT_APP_API_URL + "/records";
         axios.get(url, {withCredentials:true}).then(response => {
           setRecords(response.data);
         });
       } else {
+        userEmail = await userInfo.email
         navigate('/');
       }
     }
-    verify();
+    setTimeout(verify, 150); 
   }, [navigate, userInfo.email])
 
   //logout of account
@@ -40,7 +41,6 @@ function App() {
 
   //add new record to user account
   async function addNewRecord(e) {
-    //e.preventDefault();
     const url = process.env.REACT_APP_API_URL + "/records";
     axios.put(url, {name: name, dir: dir, money: money}, {withCredentials:true}).then(response => {
       setRecords([...records, response.data]);
