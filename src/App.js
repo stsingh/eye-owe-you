@@ -25,7 +25,7 @@ function App() {
           setRecords(response.data);
         });
       } else {
-        navigate('/');
+        setTimeout(navigate('/'), 100);
       }
       setIsLoading(false);
     }
