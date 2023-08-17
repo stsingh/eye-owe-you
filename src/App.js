@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 function App() {
   //useStates
   const options = ["owes you", "is owed"];
+  const [isLoading, setIsLoading] = useState(true);
   const [name,setName] = useState('');
   const [dir, setDir] = useState(options[0]);
   const [money, setMoney] = useState('');
@@ -26,9 +27,22 @@ function App() {
       } else {
         navigate('/');
       }
+      setIsLoading(false);
     }
-    setTimeout(verify, 250); 
+    setTimeout(verify, 250);
   }, [navigate, userInfo.email])
+
+  if(isLoading) {
+    return(
+      <div
+        className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]"
+        role="status">
+        <span
+          class="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]"
+          >Loading...</span>
+      </div>
+    )
+  }
 
   //logout of account
   function logout() {
@@ -69,10 +83,8 @@ function App() {
     return <div className="text-2xl"><span className={'text-red-800'}>You owe</span> {record.name} ${0-record?.money?.toFixed(2)}</div>
   }
 
-  
-
   document.body.className = "dark:bg-gray-800";
-  
+
   return (
     <main>
       <div className="absolute top-2 right-2">
