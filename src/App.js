@@ -16,14 +16,18 @@ function App() {
 
   //get records to page
   useEffect(() => {
-    if(userInfo.email) {
+    const verify = async () => {
+      const userEmail = await userInfo.email;
+      if(userEmail) {
         const url = process.env.REACT_APP_API_URL + "/records";
         axios.get(url, {withCredentials:true}).then(response => {
-        setRecords(response.data);
-      });
-    } else {
-      navigate('/');
+          setRecords(response.data);
+        });
+      } else {
+        navigate('/');
+      }
     }
+    verify();
   }, [navigate, userInfo.email])
 
   //logout of account
@@ -36,6 +40,7 @@ function App() {
 
   //add new record to user account
   async function addNewRecord(e) {
+    //e.preventDefault();
     const url = process.env.REACT_APP_API_URL + "/records";
     axios.put(url, {name: name, dir: dir, money: money}, {withCredentials:true}).then(response => {
       setRecords([...records, response.data]);
@@ -60,9 +65,9 @@ function App() {
   //get display sentence
   function sentence(record) {
     if(record.dir === "owes you") {
-      return <div className="text-2xl">{record.name} <span className={'text-green-800'}>{record.dir}</span> ${record.money.toFixed(2)}</div>
+      return <div className="text-2xl">{record.name} <span className={'text-green-800'}>{record.dir}</span> ${record?.money?.toFixed(2)}</div>
     }
-    return <div className="text-2xl"><span className={'text-red-800'}>You owe</span> {record.name} ${0-record.money.toFixed(2)}</div>
+    return <div className="text-2xl"><span className={'text-red-800'}>You owe</span> {record.name} ${0-record?.money?.toFixed(2)}</div>
   }
 
   
@@ -80,7 +85,7 @@ function App() {
         <span className = "p-2 flex justify-center items-center align-baseline dark:text-white font-bold text-2xl">Spending Power: </span>
       </div>
       <div className='flex justify-center items-center'>
-        <h1 className="p-3 mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">${balance.toFixed(2)}</h1>
+        <h1 className="p-3 mb-4 text-4xl font-bold leading-none tracking-tight text-gray-900 md:text-5xl lg:text-6xl dark:text-white">${balance?.toFixed(2)}</h1>
       </div>
       <form onSubmit={addNewRecord} className="space-y-3 text-center">
         <div className="gap-1 lg:flex md:flex sm:flex justify-center items-center">

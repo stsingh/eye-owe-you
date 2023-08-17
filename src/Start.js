@@ -1,14 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import UserContext from './UserContext';
 
 const Start = () => {
   const userInfo = useContext(UserContext);
   const navigate = useNavigate();
 
-  if(userInfo.email) {
-    navigate('/home');
-  }
+  useEffect(() => {
+    if(userInfo.email) {
+      navigate('/home');
+    }
+  }, [navigate, userInfo.email])
     
   return (
     <div className="grid h-screen place-items-center">
