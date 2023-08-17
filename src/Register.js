@@ -40,7 +40,7 @@ function Register() {
                 user.setEmail(response.data.email);
                 setFormInput({email:'', password:'', confirmPassword:''});
                 setFormError({email:'', password:'', confirmPassword:''});
-                navigate('/');
+                navigate('/home');
             });
         } else {
             console.log('Invalid Params')

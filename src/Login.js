@@ -17,7 +17,7 @@ function Login() {
             const data = {email, password};
             axios.post(process.env.REACT_APP_API_URL + "/login", data, {withCredentials:true}).then((response) => {
                 if(response.headers["content-length"] > 10) {
-                    navigate('/')
+                    navigate('/home')
                     user.setEmail(response.data.email);
                     setEmail('');
                     setPassword('');
