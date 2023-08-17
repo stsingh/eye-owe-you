@@ -12,13 +12,12 @@ import App from './App'
 const Landing = () => {
   const [email, setEmail] = useState('');
 
+  //Get the email to provide as context for all routes
   useEffect(() => {
     axios.get(process.env.REACT_APP_API_URL + '/user', {withCredentials:true}).then(response => {
       setEmail(response.data.email);
     })
   }, []);
-
-  
 
   document.body.className = "dark:bg-gray-800";
   return (
@@ -36,7 +35,6 @@ const Landing = () => {
           </div>
         </div>
       </BrowserRouter>
-      <div className="absolute inset-x-0 bottom-2 text-center dark:text-white" >A MERN-based webapp by&nbsp;<a href="https://stsingh.github.io/" target="_blank" rel="noreferrer">Sahej Singh</a></div>
     </UserContext.Provider>
     
   );

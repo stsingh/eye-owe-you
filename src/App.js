@@ -26,6 +26,7 @@ function App() {
     }
   }, [navigate, userInfo.email])
 
+  //logout of account
   function logout() {
     axios.post(process.env.REACT_APP_API_URL + '/logout', {}, {withCredentials:true}).then(() => {
       userInfo.setEmail('');
@@ -33,6 +34,7 @@ function App() {
     });
   }
 
+  //add new record to user account
   async function addNewRecord(e) {
     const url = process.env.REACT_APP_API_URL + "/records";
     axios.put(url, {name: name, dir: dir, money: money}, {withCredentials:true}).then(response => {
