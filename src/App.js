@@ -24,11 +24,10 @@ function App() {
           setRecords(response.data);
         });
       } else {
-        userEmail = await userInfo.email
         navigate('/');
       }
     }
-    setTimeout(verify, 150); 
+    setTimeout(verify, 250); 
   }, [navigate, userInfo.email])
 
   //logout of account
